@@ -1,7 +1,11 @@
 export const TOTAL_CARDS = 726;
 export const TARGET_CARD = 482;
 export const PACK_SIZE = 15;
-export const STARTING_PACKS = 10;
+
+export const STARTING_PACKS = 15;
+export const ONE_PACK_TRADE_COST = 5;
+export const THREE_PACK_TRADE_COST = 10;
+
 export const STORAGE_VERSION = 1;
 
 export function createNewState() {
@@ -153,11 +157,16 @@ export function tradeDuplicates(state, duplicateCost, packReward) {
 }
 
 export function checkForLoss(state) {
+  const cheapestTradeCost = Math.min(
+    ONE_PACK_TRADE_COST,
+    THREE_PACK_TRADE_COST
+  );
+
   if (
     state.status === "playing" &&
     !state.currentPack &&
     state.packsAvailable === 0 &&
-    state.duplicates < 10
+    state.duplicates < cheapestTradeCost
   ) {
     state.status = "lost";
     state.eventMessage = "No packs and not enough duplicates for a trade. The run is over.";
