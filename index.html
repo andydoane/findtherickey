@@ -99,12 +99,12 @@
           <p class="trade-copy">Duplicates are your currency. Save for the better rate or take a pack now.</p>
           <div class="trade-actions">
             <button id="tradeTenButton" class="trade-button" type="button" disabled>
-              <span><strong>10</strong> duplicates</span>
+              <span><strong id="onePackTradeCost">10</strong> duplicates</span>
               <span class="trade-arrow">→</span>
               <span><strong>1</strong> pack</span>
             </button>
             <button id="tradeTwentyFiveButton" class="trade-button trade-best" type="button" disabled>
-              <span><strong>25</strong> duplicates</span>
+              <span><strong id="threePackTradeCost">25</strong> duplicates</span>
               <span class="trade-arrow">→</span>
               <span><strong>3</strong> packs</span>
               <em>Best rate</em>
@@ -141,10 +141,9 @@
         <button class="dialog-close" value="close" aria-label="Close rules">×</button>
       </div>
       <ol class="rules-list">
-        <li>Start with <strong>10 packs</strong>. Each pack has 15 different card numbers.</li>
+        <li>Start with <strong><span id="rulesStartingPacks">10</span> packs</strong>. Each pack has 15 different card numbers.</li>
         <li>The first time a number appears, it can help form a run. Later copies become duplicates.</li>
-        <li>Trade <strong>10 duplicates for 1 pack</strong> or <strong>25 duplicates for 3 packs</strong>.</li>
-        <li>Any five consecutive unused numbers earn a bonus pack automatically. Those five numbers are then consumed for run purposes.</li>
+        <li>Trade <strong><span id="rulesOnePackTradeCost">10</span> duplicates for 1 pack</strong> or <strong><span id="rulesThreePackTradeCost">25</span> duplicates for 3 packs</strong>.</li></li>
         <li>Find <strong>#482 Rickey Henderson</strong> to win. You lose when no packs or affordable trades remain.</li>
       </ol>
       <p class="rules-note">Your current game is saved automatically in this browser.</p>
