@@ -133,8 +133,18 @@ function handleStageClick() {
     }
 
     openPack(state);
+    const result = revealNextCard(state);
     persistAndRender();
-    animateStage("is-opening");
+    animateStage(result.isTarget ? "is-target" : "is-revealing");
+
+    if (result.completedRun) {
+      pulse(elements.packsStat.closest(".stat-card"));
+    }
+
+    if (result.isTarget) {
+      window.clearTimeout(resultTimer);
+      resultTimer = window.setTimeout(showResult, 700);
+    }
     return;
   }
 
