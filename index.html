@@ -1,1 +1,171 @@
-Test
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#174a35">
+  <meta name="description" content="A quick solitaire-style 1980 baseball wax pack chase for card #482.">
+  <title>Rickey Wax Pack Solitaire</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">1980 WAX PACK SOLITAIRE</p>
+      <h1>Chase Card #482</h1>
+      <p class="subtitle">Trade duplicates. Complete number runs. Find Rickey before the packs run out.</p>
+    </div>
+    <div class="header-actions">
+      <button id="rulesButton" class="button button-secondary" type="button">Rules</button>
+      <button id="newGameButton" class="button button-danger" type="button">New Game</button>
+    </div>
+  </header>
+
+  <main class="game-shell" aria-live="polite">
+    <section class="stats-grid" aria-label="Game statistics">
+      <article class="stat-card stat-primary">
+        <span class="stat-label">Packs</span>
+        <strong id="packsStat" class="stat-value">10</strong>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Duplicates</span>
+        <strong id="duplicatesStat" class="stat-value">0</strong>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Opened</span>
+        <strong id="openedStat" class="stat-value">0</strong>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Runs</span>
+        <strong id="runsStat" class="stat-value">0</strong>
+      </article>
+    </section>
+
+    <div class="game-grid">
+      <section class="play-panel panel" aria-labelledby="playHeading">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">THE TABLE</p>
+            <h2 id="playHeading">Open the next pack</h2>
+          </div>
+          <span id="packProgress" class="progress-pill">Ready</span>
+        </div>
+
+        <button id="stageButton" class="stage-button" type="button" aria-label="Open a wax pack">
+          <div id="packView" class="pack-view">
+            <img src="assets/wax-pack.svg" alt="Retro wax pack marked 15 cards">
+            <span class="tap-hint">Tap to open</span>
+          </div>
+
+          <div id="cardView" class="card-view" hidden>
+            <div id="cardBack" class="card-back" aria-hidden="true">
+              <div class="card-back-inner">
+                <span>1980</span>
+                <strong>BASEBALL</strong>
+                <span>WAX PACK</span>
+              </div>
+            </div>
+
+            <div id="cardFace" class="card-face" hidden>
+              <img id="cardImage" alt="">
+              <div id="cardFallback" class="card-fallback" hidden>
+                <span id="fallbackNumber" class="fallback-number"></span>
+                <strong id="fallbackName"></strong>
+                <small>Image not added yet</small>
+              </div>
+              <div class="card-caption">
+                <span id="cardNumber"></span>
+                <strong id="cardName"></strong>
+                <small id="cardDescription"></small>
+              </div>
+              <span id="duplicateBadge" class="card-badge duplicate-badge" hidden>DUPLICATE</span>
+              <span id="targetBadge" class="card-badge target-badge" hidden>RICKEY!</span>
+            </div>
+          </div>
+        </button>
+
+        <p id="stageInstruction" class="stage-instruction">You have 10 packs. Tap the wrapper to begin.</p>
+        <div id="eventMessage" class="event-message" role="status">Find card #482 before your supply runs dry.</div>
+      </section>
+
+      <aside class="side-column">
+        <section class="panel trade-panel" aria-labelledby="tradeHeading">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">TRADE PILE</p>
+              <h2 id="tradeHeading">Buy more packs</h2>
+            </div>
+          </div>
+          <p class="trade-copy">Duplicates are your currency. Save for the better rate or take a pack now.</p>
+          <div class="trade-actions">
+            <button id="tradeTenButton" class="trade-button" type="button" disabled>
+              <span><strong>10</strong> duplicates</span>
+              <span class="trade-arrow">→</span>
+              <span><strong>1</strong> pack</span>
+            </button>
+            <button id="tradeTwentyFiveButton" class="trade-button trade-best" type="button" disabled>
+              <span><strong>25</strong> duplicates</span>
+              <span class="trade-arrow">→</span>
+              <span><strong>3</strong> packs</span>
+              <em>Best rate</em>
+            </button>
+          </div>
+        </section>
+
+        <section class="panel runs-panel" aria-labelledby="runsHeading">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">NUMBER RUNS</p>
+              <h2 id="runsHeading">Closest five-card runs</h2>
+            </div>
+          </div>
+          <p class="runs-copy">Five consecutive unique numbers automatically become one bonus pack. Redeemed numbers cannot overlap another run.</p>
+          <div id="runBoard" class="run-board"></div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <span>Static HTML, CSS and JavaScript — ready for GitHub Pages.</span>
+    <span>Checklist data: Baseball Almanac.</span>
+  </footer>
+
+  <dialog id="rulesDialog" class="rules-dialog">
+    <form method="dialog">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">HOW TO PLAY</p>
+          <h2>Wax Pack Solitaire</h2>
+        </div>
+        <button class="dialog-close" value="close" aria-label="Close rules">×</button>
+      </div>
+      <ol class="rules-list">
+        <li>Start with <strong>10 packs</strong>. Each pack has 15 different card numbers.</li>
+        <li>The first time a number appears, it can help form a run. Later copies become duplicates.</li>
+        <li>Trade <strong>10 duplicates for 1 pack</strong> or <strong>25 duplicates for 3 packs</strong>.</li>
+        <li>Any five consecutive unused numbers earn a bonus pack automatically. Those five numbers are then consumed for run purposes.</li>
+        <li>Find <strong>#482 Rickey Henderson</strong> to win. You lose when no packs or affordable trades remain.</li>
+      </ol>
+      <p class="rules-note">Your current game is saved automatically in this browser.</p>
+      <button class="button button-primary dialog-done" value="close">Play</button>
+    </form>
+  </dialog>
+
+  <dialog id="resultDialog" class="result-dialog">
+    <div id="resultBurst" class="result-burst" aria-hidden="true">★</div>
+    <p id="resultEyebrow" class="eyebrow">RUN COMPLETE</p>
+    <h2 id="resultTitle">You found Rickey!</h2>
+    <p id="resultText"></p>
+    <dl class="result-stats">
+      <div><dt>Packs opened</dt><dd id="resultPacks">0</dd></div>
+      <div><dt>Cards revealed</dt><dd id="resultCards">0</dd></div>
+      <div><dt>Runs completed</dt><dd id="resultRuns">0</dd></div>
+    </dl>
+    <button id="playAgainButton" class="button button-primary" type="button">Deal Again</button>
+  </dialog>
+
+  <noscript>This game requires JavaScript.</noscript>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
