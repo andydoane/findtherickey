@@ -1,4 +1,7 @@
 import {
+  ONE_PACK_TRADE_COST,
+  STARTING_PACKS,
+  THREE_PACK_TRADE_COST,
   createNewState,
   finishPack,
   formatRun,
@@ -37,6 +40,11 @@ const elements = {
   eventMessage: document.querySelector("#eventMessage"),
   tradeTenButton: document.querySelector("#tradeTenButton"),
   tradeTwentyFiveButton: document.querySelector("#tradeTwentyFiveButton"),
+  onePackTradeCost: document.querySelector("#onePackTradeCost"),
+  threePackTradeCost: document.querySelector("#threePackTradeCost"),
+  rulesStartingPacks: document.querySelector("#rulesStartingPacks"),
+  rulesOnePackTradeCost: document.querySelector("#rulesOnePackTradeCost"),
+  rulesThreePackTradeCost: document.querySelector("#rulesThreePackTradeCost"),
   runBoard: document.querySelector("#runBoard"),
   rulesButton: document.querySelector("#rulesButton"),
   newGameButton: document.querySelector("#newGameButton"),
@@ -74,6 +82,7 @@ async function boot() {
     cardData = payload.cards;
     cardsByNumber = new Map(cardData.map((card) => [card.number, card]));
     bindEvents();
+    renderSettingsText();
     render();
 
     if (state.status !== "playing") {
@@ -91,8 +100,8 @@ async function boot() {
 
 function bindEvents() {
   elements.stageButton.addEventListener("click", handleStageClick);
-  elements.tradeTenButton.addEventListener("click", () => handleTrade(10, 1));
-  elements.tradeTwentyFiveButton.addEventListener("click", () => handleTrade(25, 3));
+  elements.tradeTenButton.addEventListener("click", () => handleTrade(ONE_PACK_TRADE_COST, 1));
+  elements.tradeTwentyFiveButton.addEventListener("click", () => handleTrade(THREE_PACK_TRADE_COST, 3));
 
   elements.rulesButton.addEventListener("click", () => elements.rulesDialog.showModal());
   elements.newGameButton.addEventListener("click", () => {
@@ -273,22 +282,37 @@ function renderCard(number) {
   elements.cardFace.classList.toggle("is-target", card.target);
 }
 
+function renderSettingsText() {
+  elements.onePackTradeCost.textContent = ONE_PACK_TRADE_COST;
+  elements.threePackTradeCost.textContent = THREE_PACK_TRADE_COST;
+  elements.rulesStartingPacks.textContent = STARTING_PACKS;
+  elements.rulesOnePackTradeCost.textContent = ONE_PACK_TRADE_COST;
+  elements.rulesThreePackTradeCost.textContent = THREE_PACK_TRADE_COST;
+}
+
 function renderTrades() {
   const disabled = state.status !== "playing";
-  elements.tradeTenButton.disabled = disabled || state.duplicates < 10;
-  elements.tradeTwentyFiveButton.disabled = disabled || state.duplicates < 25;
+  const onePackShortfall = ONE_PACK_TRADE_COST - state.duplicates;
+  const threePackShortfall = THREE_PACK_TRADE_COST - state.duplicates;
+
+  elements.tradeTenButton.disabled =
+    disabled || state.duplicates < ONE_PACK_TRADE_COST;
+
+  elements.tradeTwentyFiveButton.disabled =
+    disabled || state.duplicates < THREE_PACK_TRADE_COST;
 
   elements.tradeTenButton.setAttribute(
     "aria-label",
-    state.duplicates < 10
-      ? `Need ${10 - state.duplicates} more duplicates to trade for one pack`
-      : "Trade 10 duplicates for one pack"
+    state.duplicates < ONE_PACK_TRADE_COST
+      ? `Need ${onePackShortfall} more duplicate${onePackShortfall === 1 ? "" : "s"} to trade for one pack`
+      : `Trade ${ONE_PACK_TRADE_COST} duplicates for one pack`
   );
+
   elements.tradeTwentyFiveButton.setAttribute(
     "aria-label",
-    state.duplicates < 25
-      ? `Need ${25 - state.duplicates} more duplicates to trade for three packs`
-      : "Trade 25 duplicates for three packs"
+    state.duplicates < THREE_PACK_TRADE_COST
+      ? `Need ${threePackShortfall} more duplicate${threePackShortfall === 1 ? "" : "s"} to trade for three packs`
+      : `Trade ${THREE_PACK_TRADE_COST} duplicates for three packs`
   );
 }
 
